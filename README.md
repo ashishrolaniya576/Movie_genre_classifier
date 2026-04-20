@@ -1,57 +1,103 @@
-Multimodal Movie Genre Classifier
+#  Multimodal Movie Genre Classifier (MM-IMDb)
 
-An AI system that predicts movie genres by fusing visual features from posters and semantic embeddings from plot summaries.
-🚀 Project Overview
+A **high-performance Deep Learning pipeline** built with **PyTorch** that predicts movie genres by combining:
 
-This project implements a Late Fusion Multimodal Architecture. By combining a ResNet-50 (Computer Vision) and DistilBERT (Natural Language Processing), the model achieves a more nuanced understanding of movie genres than a single-modality system could.
-Performance Results
+-  **Visual aesthetics** from movie posters  
+-  **Semantic meaning** from plot summaries  
 
-    Macro-F1 Score: 0.8410
+---
 
-    Training Time: 10 Epochs on NVIDIA GPU (Lightning AI)
+##  Project Architecture
 
-    Dataset: MM-IMDb (Posters + Plot Metadata)
+This project implements a **Late-Fusion Multimodal Neural Network**:
 
-🧠 Model Architecture
+### 🔹 Vision Branch
+- Uses **ResNet-50 (Pre-trained on ImageNet)**
+- Extracts **2048-dimensional spatial features** from posters
 
-The system processes two distinct data streams before fusing them for final classification:
+### 🔹 Text Branch
+- Uses **DistilBERT (Transformer-based model)**
+- Generates **768-dimensional contextual embeddings** from plot descriptions
 
-    Vision Tower: ResNet-50 (Pre-trained on ImageNet) extracts spatial features from movie posters.
+### 🔹 Fusion Layer
+- Concatenates features (**2048 + 768 = 2816 dimensions**)
+- Passes through a **Multi-Layer Perceptron (MLP)**
+- Uses **Dropout** for regularization
+- Outputs **multi-label genre predictions**
 
-    Text Tower: DistilBERT extracts contextual embeddings from movie plot summaries.
+---
 
-    Fusion Head: A Multi-Layer Perceptron (MLP) that concatenates both feature vectors (2048+768=2816 dimensions) to predict across 25 genre categories.
+##  Project Structure
 
-📂 Project Structure
+```text
+movie_genre_classifier/
+├── data/                    # Local dataset (ignored by Git)
+├── src/
+│   ├── data_loader.py      # Dataset parsing (MM-IMDb)
+│   ├── model.py            # Multimodal architecture (ResNet + BERT)
+│   ├── train.py            # Training pipeline with evaluation
+│   ├── predict.py          # Inference script for predictions
+├── movie_genre.ipynb       # Notebook for experimentation & testing
+├── .gitignore              # Ignore large files (dataset, checkpoints)
+├── requirements.txt        # Dependencies
+└── README.md               # Project documentation
 
-    src/data_loader.py: Handles JSON parsing, image preprocessing, and PyTorch Dataset/DataLoader logic.
+---
 
-    src/model.py: Defines the MultiModalModel architecture and the feature fusion layers.
+##  Performance Results
 
-    src/train.py: Contains the training loop, loss functions, and checkpoint saving logic.
+-  **Macro-F1 Score:** **0.8410**
+-  **Training Setup:** NVIDIA GPU (Lightning AI)
+-  **Epochs:** 10
+-  **Dataset:** MM-IMDb *(Posters + Plot Metadata)*
 
-    src/predict.py: A standalone tool for real-time inference on new, unseen movie data.
 
-    movie_genre.ipynb: Interactive notebook for data visualization, testing, and result analysis.
+##  Key Features
 
-    checkpoints/: Directory containing trained model weights (.pt files) for each epoch.
+-  **Multimodal Learning** → Combines image + text
+-  **Multi-Label Classification** → Multiple genres per movie
+-  **Class Imbalance Handling** → BCEWithLogitsLoss
+-  **Scalable Architecture** → Easy to extend
 
-✨ Key Features & Usage
+---
 
-    Multi-Label Classification: Advanced logic to identify multiple overlapping genres for a single movie entry.
+##  Installation
+    pip install -r requirements.txt
 
-    Optimized Learning: Utilizes BCEWithLogitsLoss to effectively manage class imbalance across the 25 target genres.
 
-    Automated Setup: Environment can be fully initialized using the command: pip install -r requirements.txt.
+### 🔹 Run Inference
+    python src/predict.py
 
-    Real-Time Inference: Supports external testing via terminal using: export PYTHONPATH=$PYTHONPATH:$(pwd) && python3 src/predict.py.
 
-    Checkpointing System: Automatically saves model states, allowing for training resumption and instant demo loading.
+### 🔹 Experiment (Notebook)
+    movie_genre.ipynb
 
-💡 Future Improvements
 
-    Attention Fusion: Implementing Cross-modal attention to weigh text vs. image importance dynamically.
+---
 
-    Web Deployment: Wrapping the inference script in a Gradio or Streamlit interface for non-technical users.
+##  Future Improvements
 
-    Feature Expansion: Integrating additional metadata such as Director, Cast, and Budget to refine predictions.
+-  **Cross-Modal Attention**
+  - Learn importance of text vs image dynamically
+
+- 🌐 **Web Deployment**
+  - Build UI using **Gradio / Streamlit**
+
+-  **Feature Expansion**
+  - Add **Director, Cast, Budget**
+
+-  **Advanced Models**
+  - Use **BERT / RoBERTa**
+  - Try **Vision Transformers (ViT)**
+
+---
+
+##  Tech Stack
+
+-  Python  
+-  PyTorch  
+-  HuggingFace Transformers  
+-  Torchvision  
+-  Scikit-learn  
+
+---
