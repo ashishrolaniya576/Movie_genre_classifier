@@ -8,61 +8,50 @@ Performance Results
 
     Macro-F1 Score: 0.8410
 
-    Exact Match Ratio: [Your %]
-
     Training Time: 10 Epochs on NVIDIA GPU (Lightning AI)
 
-🧠 Architecture
+    Dataset: MM-IMDb (Posters + Plot Metadata)
 
-The model processes two distinct data streams before fusing them for final classification:
+🧠 Model Architecture
+
+The system processes two distinct data streams before fusing them for final classification:
 
     Vision Tower: ResNet-50 (Pre-trained on ImageNet) extracts spatial features from movie posters.
 
     Text Tower: DistilBERT extracts contextual embeddings from movie plot summaries.
 
-    Fusion Head: A Multi-Layer Perceptron (MLP) that concatenates both feature vectors (2048+768=2816 dimensions) to predict 25 possible genres.
+    Fusion Head: A Multi-Layer Perceptron (MLP) that concatenates both feature vectors (2048+768=2816 dimensions) to predict across 25 genre categories.
 
 📂 Project Structure
-Plaintext
 
-.
-├── src/
-│   ├── data_loader.py   # JSON parsing & PyTorch Dataset logic
-│   ├── model.py        # MultiModalModel architecture
-│   ├── train.py        # Training & Checkpointing script
-│   └── predict.py      # Real-time inference script
-├── movie_genre.ipynb   # Interactive analysis and visualization
-├── checkpoints/        # Saved model weights (.pt files)
-└── requirements.txt    # Dependencies
+    src/data_loader.py: Handles JSON parsing, image preprocessing, and PyTorch Dataset/DataLoader logic.
 
-🛠️ How to Run
-1. Setup Environment
+    src/model.py: Defines the MultiModalModel architecture and the feature fusion layers.
 
-Install all required libraries using pip:
-Bash
+    src/train.py: Contains the training loop, loss functions, and checkpoint saving logic.
 
-pip install -r requirements.txt
+    src/predict.py: A standalone tool for real-time inference on new, unseen movie data.
 
-2. Real-Time Inference
+    movie_genre.ipynb: Interactive notebook for data visualization, testing, and result analysis.
 
-Test the model with your own images and plot descriptions:
-Bash
+    checkpoints/: Directory containing trained model weights (.pt files) for each epoch.
 
-export PYTHONPATH=$PYTHONPATH:$(pwd)
-python3 src/predict.py
+✨ Key Features & Usage
 
-✨ Key Features
+    Multi-Label Classification: Advanced logic to identify multiple overlapping genres for a single movie entry.
 
-    Multi-Label Classification: Handles movies belonging to multiple genres simultaneously.
+    Optimized Learning: Utilizes BCEWithLogitsLoss to effectively manage class imbalance across the 25 target genres.
 
-    Weighted Loss: Utilizes BCEWithLogitsLoss to account for class imbalance across 25 genres.
+    Automated Setup: Environment can be fully initialized using the command: pip install -r requirements.txt.
 
-    Inference Tool: Includes a dedicated script for testing "unseen" data from external sources.
+    Real-Time Inference: Supports external testing via terminal using: export PYTHONPATH=$PYTHONPATH:$(pwd) && python3 src/predict.py.
+
+    Checkpointing System: Automatically saves model states, allowing for training resumption and instant demo loading.
 
 💡 Future Improvements
 
-    Implement Attention-based Fusion (Cross-modal attention).
+    Attention Fusion: Implementing Cross-modal attention to weigh text vs. image importance dynamically.
 
-    Deploy a web interface using Gradio or Streamlit.
+    Web Deployment: Wrapping the inference script in a Gradio or Streamlit interface for non-technical users.
 
-    Incorporate additional metadata such as Director or Cast as model features.
+    Feature Expansion: Integrating additional metadata such as Director, Cast, and Budget to refine predictions.
