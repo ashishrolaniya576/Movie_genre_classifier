@@ -1,0 +1,21 @@
+# Prerequisites
+venv/
+.env
+
+# Data - DO NOT UPLOAD
+imdb/
+data/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE settings
+.vscode/
+.idea/
+
+# ML Artifacts
+checkpoints/
+*.pt
+*.pth
